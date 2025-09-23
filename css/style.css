@@ -2166,7 +2166,7 @@ p {
 
 /* projects section  */
 
-.project-card {
+/* .project-card {
   background: #fff;
   border-radius: 15px;
   padding: 20px;
@@ -2174,29 +2174,65 @@ p {
   margin-bottom: 30px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
-}
+} */
 
 .project-card:hover {
   transform: translateY(-10px);
 }
 
-.project-img {
+/* .project-img {
   width: 100%;
-  height: 170px;
+  height: 150px;
   object-fit: cover;
   border-radius: 10px;
-}
+} */
 
-.project-title {
+/* .project-title {
   font-size: 20px;
   margin-top: 15px;
+  color: #333;
+} */
+
+/* .project-desc {
+  font-size: 15px;
+  color: #666;
+  margin: 10px 0 20px;
+} */
+
+/* Project cards ko equal height dene ke liye */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* sabko equal height */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+/* Images ko fix size me crop karke uniform banane ke liye */
+.project-card img {
+  width: 100%;
+  height: 200px; /* sab images ki height fix */
+  object-fit: cover; /* image crop hoke fit ho jayegi */
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Title aur desc ko properly align karne ke liye */
+.project-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
   color: #333;
 }
 
 .project-desc {
-  font-size: 15px;
+  flex-grow: 1; /* desc stretch hoke sab card equal height banayega */
+  font-size: 14px;
+  margin-bottom: 15px;
   color: #666;
-  margin: 10px 0 20px;
 }
 
 .project-card .btn {
