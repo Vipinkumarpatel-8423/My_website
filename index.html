@@ -49,6 +49,7 @@
 		gtag('js', new Date());
 		gtag('config', 'UA-142494086-2');
 	</script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -337,11 +338,14 @@
 			<p>If you'd like to work together or have any questions, feel free to reach out!</p>
 
 			<div class="contact-form-container">
-				<form class="contact-form" action="#" method="POST">
+
+				<!-- Contact Form  -->
+
+				<form class="contact-form" id="contactForm">
 					<input type="text" name="name" placeholder="Your Name *" required />
 					<input type="email" name="email" placeholder="Your Email *" required />
-					<textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-					<button type="submit">Send Message</button>
+					<textarea name="message" rows="5" placeholder="Your Message" required className="outline-none"></textarea>
+					<button type="submit">Send</button>
 				</form>
 
 				<div class="contact-info">
@@ -429,6 +433,45 @@
 			</div>
 		</div>
 	</footer>
+
+	<script>
+		const form = document.getElementById("contactForm");
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			const formData = {
+				name: form.name.value,
+				email: form.email.value,
+				message: form.message.value
+			}
+			try {
+				const res = await fetch("https://propfolio-backend.onrender.com/contact", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(formData),
+				})
+				const data = await res.json()
+				Swal.fire({
+					icon: "success",
+					title: "Message Sent!",
+					text: data.message,
+					timer: 2000,
+					showConfirmButton: false
+				});
+				form.reset();
+			} catch (error) {
+				console.error("Error:", error);
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong, try again!",
+				});
+			}
+
+
+
+
+		})
+	</script>
 
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

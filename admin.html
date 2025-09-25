@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Contact Messages</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #333;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 15px 30px;
+      color: white;
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #ff4b5c, #ff6b6b);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #ff6b6b, #ff4b5c);
+      transform: scale(1.05);
+    }
+
+    .logout-btn:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="admin-header">📩 Contact Messages
+    <span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+
+    </span>
+  </h1>
+
+
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+      </tr>
+    </thead>
+    <tbody id="contactTableBody">
+      <!-- Data will come here -->
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchContacts() {
+      try {
+        // ⚠️ Yahan apna backend ka deployed URL lagao
+        const res = await fetch("https://propfolio-backend.onrender.com/contacts");
+        const contacts = await res.json();
+
+        const tbody = document.getElementById("contactTableBody");
+        tbody.innerHTML = ""; // clear old data
+
+        contacts.forEach(contact => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${contact.name}</td>
+            <td>${contact.email}</td>
+            <td>${contact.message}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error("Error fetching contacts:", err);
+      }
+    }
+
+    // Page load hote hi data fetch karo
+    fetchContacts();
+  </script>
+
+  <script>
+    // Agar login nahi hai to admin-login.html par bhejo
+    if (localStorage.getItem("isAdmin") !== "true") {
+      window.location.href = "admin-login.html";
+    }
+  </script>
+
+
+  <script>
+    function logout() {
+      localStorage.removeItem("isAdmin");
+      window.location.href = "admin-login.html";
+    }
+  </script>
+
+
+</body>
+
+</html>
