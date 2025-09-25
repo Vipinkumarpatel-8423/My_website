@@ -18,28 +18,6 @@
       margin-bottom: 20px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-    }
-
-    th,
-    td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-
-    th {
-      background: #333;
-      color: #fff;
-    }
-
-    tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-
     .admin-header {
       display: flex;
       justify-content: space-between;
@@ -71,11 +49,40 @@
       transform: scale(0.95);
     }
 
+    /* Cards style */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .card p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #555;
+      word-break: break-word;
+    }
+
     .delete-btn {
+      margin-top: 10px;
       background: #ff4b5c;
       color: white;
       border: none;
-      padding: 6px 12px;
+      padding: 8px 14px;
       font-size: 14px;
       border-radius: 5px;
       cursor: pointer;
@@ -95,19 +102,8 @@
     </span>
   </h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Message</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="contactTableBody">
-      <!-- Data will come here -->
-    </tbody>
-  </table>
+  <!-- Cards container -->
+  <div class="cards-container" id="contactCards"></div>
 
   <script>
     const API_URL = "https://propfolio-backend.onrender.com/contacts";
@@ -117,35 +113,33 @@
         const res = await fetch(API_URL);
         const contacts = await res.json();
 
-        const tbody = document.getElementById("contactTableBody");
-        tbody.innerHTML = ""; // clear old data
+        const container = document.getElementById("contactCards");
+        container.innerHTML = ""; // clear old data
 
         contacts.forEach(contact => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${contact.name}</td>
-            <td>${contact.email}</td>
-            <td>${contact.message}</td>
-            <td><button class="delete-btn" onclick="deleteContact('${contact._id}')">Delete</button></td>
+          const card = document.createElement("div");
+          card.classList.add("card");
+          card.innerHTML = `
+            <h3>${contact.name}</h3>
+            <p><strong>Email:</strong> ${contact.email}</p>
+            <p><strong>Message:</strong> ${contact.message}</p>
+            <button class="delete-btn" onclick="deleteContact('${contact._id}')">Delete</button>
           `;
-          tbody.appendChild(row);
+          container.appendChild(card);
         });
       } catch (err) {
         console.error("Error fetching contacts:", err);
       }
     }
 
-    // Delete Button
-
     async function deleteContact(id) {
-      // SweetAlert2 confirmation popup
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: "You won't be able to recover this contact!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
         confirmButtonText: "Yes, delete it!"
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -154,7 +148,7 @@
             const data = await res.json();
 
             if (data.success) {
-              Swal.fire("Deleted!", "Contact has been deleted.", "success");
+              Swal.fire("Deleted!", "The contact has been deleted.", "success");
               fetchContacts(); // refresh list
             } else {
               Swal.fire("Error!", "Failed to delete contact.", "error");
